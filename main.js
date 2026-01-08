@@ -44,103 +44,101 @@ if (currentState.visits > 2) {
 // === AUDIO SYSTEM ===
 const audioToggle = document.getElementById('audio-toggle');
 let audioCtx = null;
-let droneNode = null;
-let heartbeatNode = null;
+let droneBuffer = null;
+let droneSource = null;
+let heartbeatTimer = null;
 let isPlaying = false;
 
 async function initAudio() {
+    // 1. Init Context
     if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     }
-    
     if (audioCtx.state === 'suspended') {
         await audioCtx.resume();
     }
 
-    try {
-        // Drone
-        const response = await fetch('drone.mp3');
-        const arrayBuffer = await response.arrayBuffer();
-        const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
-        
-        const source = audioCtx.createBufferSource();
-        source.buffer = audioBuffer;
-        source.loop = true;
-        
-        const gainNode = audioCtx.createGain();
-        gainNode.gain.value = 0.3; 
-        
-        source.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        source.start(0);
-        
-        droneNode = { source, gainNode };
-
-        // Heartbeat (Procedural)
-        if (GameState.get().visits > 3) {
-            startHeartbeat();
+    // 2. Load Buffer (Once)
+    if (!droneBuffer) {
+        try {
+            audioToggle.innerText = "[ LOADING... ]";
+            const response = await fetch('/drone.mp3');
+            const arrayBuffer = await response.arrayBuffer();
+            droneBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+        } catch (e) {
+            console.error("Audio Load Error:", e);
+            audioToggle.innerText = "[ ERROR ]";
+            return;
         }
-
-        isPlaying = true;
-        audioToggle.innerText = "[ AUDIO: ACTIVE ]";
-        audioToggle.style.color = "var(--scan-green)";
-        audioToggle.style.borderColor = "var(--scan-green)";
-        
-    } catch (e) {
-        console.error("Audio Load Error:", e);
     }
+
+    if (isPlaying) return; // Already playing
+
+    // 3. Start Drone
+    const source = audioCtx.createBufferSource();
+    source.buffer = droneBuffer;
+    source.loop = true;
+    
+    const gainNode = audioCtx.createGain();
+    gainNode.gain.value = 0.4; 
+    
+    source.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    source.start(0);
+    droneSource = source;
+
+    // 4. Start Heartbeat (if high visits)
+    if (GameState.get().visits > 3) {
+        startHeartbeat();
+    }
+
+    isPlaying = true;
+    audioToggle.innerText = "[ AUDIO: ACTIVE ]";
+    audioToggle.style.color = "var(--scan-green)";
+    audioToggle.style.borderColor = "var(--scan-green)";
 }
 
 function startHeartbeat() {
     if (!audioCtx) return;
     
-    // Create oscillator for low thumping
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
-    
     osc.type = 'sine';
     osc.frequency.value = 50;
-    
     gain.gain.value = 0;
-    
     osc.connect(gain);
     gain.connect(audioCtx.destination);
     osc.start();
-    
-    // Heartbeat rhythm
-    let nextBeat = audioCtx.currentTime;
-    
+
     function beat() {
         if (!isPlaying) {
-            osc.stop(); 
+            try { osc.stop(); } catch(e){}
             return;
         }
         
         const time = audioCtx.currentTime;
-        // Lub-dub
         gain.gain.cancelScheduledValues(time);
         gain.gain.setValueAtTime(0, time);
-        gain.gain.linearRampToValueAtTime(0.4, time + 0.1);
+        gain.gain.linearRampToValueAtTime(0.5, time + 0.1);
         gain.gain.exponentialRampToValueAtTime(0.001, time + 0.3);
         
         gain.gain.setValueAtTime(0, time + 0.4);
-        gain.gain.linearRampToValueAtTime(0.3, time + 0.5);
+        gain.gain.linearRampToValueAtTime(0.4, time + 0.5);
         gain.gain.exponentialRampToValueAtTime(0.001, time + 0.7);
 
-        setTimeout(beat, 1200); // BPM approx 50
+        heartbeatTimer = setTimeout(beat, 1200);
     }
     beat();
-    heartbeatNode = { osc, gain };
 }
 
 function stopAudio() {
-    if (droneNode) {
-        droneNode.source.stop();
-        droneNode = null;
+    if (droneSource) {
+        try { droneSource.stop(); } catch(e) {}
+        droneSource = null;
     }
-    if (heartbeatNode) {
-        heartbeatNode.osc.stop();
-        heartbeatNode = null;
+    if (heartbeatTimer) {
+        clearTimeout(heartbeatTimer);
+        heartbeatTimer = null;
     }
     isPlaying = false;
     audioToggle.innerText = "[ AUDIO: OFF ]";
@@ -148,13 +146,15 @@ function stopAudio() {
     audioToggle.style.borderColor = "";
 }
 
-audioToggle.addEventListener('click', () => {
-    if (isPlaying) {
-        stopAudio();
-    } else {
-        initAudio();
-    }
-});
+if (audioToggle) {
+    audioToggle.addEventListener('click', () => {
+        if (isPlaying) {
+            stopAudio();
+        } else {
+            initAudio();
+        }
+    });
+}
 
 
 // === CUSTOM CURSOR ===
