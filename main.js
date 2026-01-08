@@ -281,26 +281,31 @@ if (ctaBtn) {
 document.querySelectorAll('.access-btn').forEach(btn => {
     btn.addEventListener('click', function(e) {
         const btn = e.target;
+        const target = btn.getAttribute('data-target');
         const originalText = btn.innerText;
         
-        // Fail state simulation
-        btn.innerText = "ENCRYPTED";
-        btn.style.color = "var(--glitch-red)";
-        btn.style.borderColor = "var(--glitch-red)";
+        // Decryption simulation
+        btn.innerText = "DECRYPTING...";
+        btn.style.color = "var(--scan-green)";
+        btn.style.borderColor = "var(--scan-green)";
         
-        // Optional: Flash the terminal or show an alert
+        // Terminal feedback
         const terminalOutput = document.getElementById('terminal-output');
         if(terminalOutput) {
-            terminalOutput.innerHTML += `<div style="color:var(--glitch-red)">> SYSTEM ALERT: UNAUTHORIZED ACCESS ATTEMPT ON SECURE ARCHIVE.</div>`;
+            terminalOutput.innerHTML += `<div style="color:var(--scan-green)">> INITIATING HANDSHAKE WITH ${target.toUpperCase()}...</div>`;
             const body = document.querySelector('.terminal-body');
             if(body) body.scrollTop = body.scrollHeight;
         }
 
         setTimeout(() => {
-            btn.innerText = originalText;
-            btn.style.color = "";
-            btn.style.borderColor = "";
-        }, 1500);
+            btn.innerText = "ACCESS GRANTED";
+            btn.style.backgroundColor = "var(--scan-green)";
+            btn.style.color = "#000";
+            
+            setTimeout(() => {
+                window.location.href = target;
+            }, 500);
+        }, 1000);
     });
 });
 
