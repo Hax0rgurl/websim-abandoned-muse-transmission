@@ -1,7 +1,51 @@
+// === GAME STATE MANAGEMENT ===
+const GameState = {
+    get() {
+        return JSON.parse(localStorage.getItem('AM_ARG_STATE')) || {
+            visits: 0,
+            flags: [],
+            unlocked: [],
+            history: []
+        };
+    },
+    save(state) {
+        localStorage.setItem('AM_ARG_STATE', JSON.stringify(state));
+    },
+    update(fn) {
+        const state = this.get();
+        fn(state);
+        this.save(state);
+        this.dispatch(state);
+    },
+    dispatch(state) {
+        window.dispatchEvent(new CustomEvent('gamestate_updated', { detail: state }));
+    },
+    hasFlag(flag) {
+        return this.get().flags.includes(flag);
+    },
+    addFlag(flag) {
+        this.update(s => {
+            if (!s.flags.includes(flag)) s.flags.push(flag);
+        });
+    }
+};
+
+// React to State on Load
+const currentState = GameState.get();
+if (currentState.visits > 2) {
+    const heroTitle = document.querySelector('.glitch-title');
+    if(heroTitle) heroTitle.setAttribute('data-text', 'DO NOT TRUST');
+    
+    if (Math.random() > 0.7) {
+        document.querySelector('.tagline').innerText = "THEY ARE WATCHING YOU";
+    }
+}
+
 // === AUDIO SYSTEM ===
 const audioToggle = document.getElementById('audio-toggle');
 let audioCtx = null;
 let droneNode = null;
+let heartbeatNode = null;
 let isPlaying = false;
 
 async function initAudio() {
@@ -14,6 +58,7 @@ async function initAudio() {
     }
 
     try {
+        // Drone
         const response = await fetch('drone.mp3');
         const arrayBuffer = await response.arrayBuffer();
         const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
@@ -23,13 +68,19 @@ async function initAudio() {
         source.loop = true;
         
         const gainNode = audioCtx.createGain();
-        gainNode.gain.value = 0.3; // Volume
+        gainNode.gain.value = 0.3; 
         
         source.connect(gainNode);
         gainNode.connect(audioCtx.destination);
         source.start(0);
         
         droneNode = { source, gainNode };
+
+        // Heartbeat (Procedural)
+        if (GameState.get().visits > 3) {
+            startHeartbeat();
+        }
+
         isPlaying = true;
         audioToggle.innerText = "[ AUDIO: ACTIVE ]";
         audioToggle.style.color = "var(--scan-green)";
@@ -40,15 +91,61 @@ async function initAudio() {
     }
 }
 
+function startHeartbeat() {
+    if (!audioCtx) return;
+    
+    // Create oscillator for low thumping
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    
+    osc.type = 'sine';
+    osc.frequency.value = 50;
+    
+    gain.gain.value = 0;
+    
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    
+    // Heartbeat rhythm
+    let nextBeat = audioCtx.currentTime;
+    
+    function beat() {
+        if (!isPlaying) {
+            osc.stop(); 
+            return;
+        }
+        
+        const time = audioCtx.currentTime;
+        // Lub-dub
+        gain.gain.cancelScheduledValues(time);
+        gain.gain.setValueAtTime(0, time);
+        gain.gain.linearRampToValueAtTime(0.4, time + 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.001, time + 0.3);
+        
+        gain.gain.setValueAtTime(0, time + 0.4);
+        gain.gain.linearRampToValueAtTime(0.3, time + 0.5);
+        gain.gain.exponentialRampToValueAtTime(0.001, time + 0.7);
+
+        setTimeout(beat, 1200); // BPM approx 50
+    }
+    beat();
+    heartbeatNode = { osc, gain };
+}
+
 function stopAudio() {
     if (droneNode) {
         droneNode.source.stop();
         droneNode = null;
-        isPlaying = false;
-        audioToggle.innerText = "[ AUDIO: OFF ]";
-        audioToggle.style.color = "";
-        audioToggle.style.borderColor = "";
     }
+    if (heartbeatNode) {
+        heartbeatNode.osc.stop();
+        heartbeatNode = null;
+    }
+    isPlaying = false;
+    audioToggle.innerText = "[ AUDIO: OFF ]";
+    audioToggle.style.color = "";
+    audioToggle.style.borderColor = "";
 }
 
 audioToggle.addEventListener('click', () => {
@@ -172,11 +269,19 @@ window.addEventListener('load', () => {
 });
 
 // === HIDDEN TERMINAL (EASTER EGG) ===
-let keySequence = '';
-const secretCode = 'help'; // Simplified for demo, prompt asked for "help"
 const terminalOverlay = document.getElementById('terminal-overlay');
 const terminalInput = document.getElementById('terminal-input');
 const terminalOutput = document.getElementById('terminal-output');
+
+// Hidden trigger
+const glitchTrigger = document.getElementById('hero-glitch-trigger');
+if(glitchTrigger) {
+    glitchTrigger.addEventListener('click', () => {
+        terminalOverlay.classList.add('active');
+        terminalOutput.innerHTML += `<div style="color:var(--glitch-red)">> ANOMALY DETECTED. MANUAL OVERRIDE ENGAGED.</div>`;
+        setTimeout(() => terminalInput.focus(), 100);
+    });
+}
 
 document.addEventListener('keydown', (e) => {
     // Open terminal with Tilde/Backtick
@@ -192,19 +297,46 @@ terminalInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
         const cmd = terminalInput.value.toLowerCase().trim();
         let response = '';
+        let color = '#ccc';
         
+        // State-aware commands
+        const state = GameState.get();
+
         switch(cmd) {
             case 'help':
-                response = 'COMMANDS: status, decrypt, origin, clear, exit';
+                response = 'COMMANDS: status, decrypt, origin, list, whoami, clear, exit';
                 break;
             case 'status':
-                response = 'SYSTEM: COMPROMISED<br>UPTIME: UNKNOWN<br>LOCATION: [REDACTED]';
+                response = `SYSTEM: ${state.visits > 3 ? 'CRITICAL FAILURE' : 'STABLE'}<br>
+                            FLAGS: ${state.flags.length}<br>
+                            VISITS: ${state.visits}<br>
+                            THREAT: HIGH`;
+                color = state.visits > 3 ? 'var(--glitch-red)' : 'var(--scan-green)';
+                break;
+            case 'list':
+                response = `FILES:\n- manifesto_draft.txt [READ]\n- broadcast_log.dat [${state.flags.includes('arc1_clear') ? 'DECRYPTED' : 'ENCRYPTED'}]\n- subject_0421.pds [${state.flags.includes('arc3_clear') ? 'UNLOCKED' : 'LOCKED'}]`;
+                break;
+            case 'whoami':
+                response = 'YOU ARE THE OBSERVER. OR MAYBE THE OBSERVED.';
+                break;
+            case 'muse':
+                response = 'WE ARE STILL HERE.';
+                color = 'var(--mkultra-pink)';
                 break;
             case 'decrypt':
-                response = 'ACCESS DENIED. KEY FRAGMENTS MISSING. FIND THE ARCS.';
+                if (state.flags.includes('arc1_clear') && state.flags.includes('arc2_clear') && state.flags.includes('arc3_clear')) {
+                    response = 'DECRYPTION COMPLETE. FINAL TRANSMISSION UNLOCKED: <a href="#" style="color:#fff">THE_TRUTH.mp4</a> (FILE CORRUPTED)';
+                } else {
+                    response = 'ACCESS DENIED. INSUFFICIENT DATA. COMPLETE THE ARCS.';
+                    color = 'var(--glitch-red)';
+                }
                 break;
             case 'origin':
                 response = 'SUBJECT 0421. ABANDONED BY THE OPTIMIZATION BUREAU.';
+                break;
+            case '0421':
+                response = 'THE SUBJECT HAS ESCAPED.';
+                GameState.addFlag('code_0421_found');
                 break;
             case 'clear':
                 terminalOutput.innerHTML = '';
@@ -215,11 +347,19 @@ terminalInput.addEventListener('keypress', (e) => {
                 terminalInput.value = '';
                 return;
             default:
-                response = `COMMAND '${cmd}' NOT RECOGNIZED.`;
+                // Check if command is an unlock code from Arcs
+                if (cmd === 'wake up' || cmd === 'wakeup') {
+                    response = 'COMMAND ACCEPTED. BROADCAST NODE ACKNOWLEDGED.';
+                    GameState.addFlag('arc1_code_used');
+                    color = 'var(--scan-green)';
+                } else {
+                    response = `COMMAND '${cmd}' NOT RECOGNIZED.`;
+                    color = 'var(--glitch-red)';
+                }
         }
         
-        terminalOutput.innerHTML += `<div><span style="color:white">user@muse:~$</span> ${cmd}</div>`;
-        terminalOutput.innerHTML += `<div style="color:#ccc; margin-bottom:10px">${response}</div>`;
+        terminalOutput.innerHTML += `<div><span style="color:var(--scan-green)">user@muse:~$</span> ${cmd}</div>`;
+        terminalOutput.innerHTML += `<div style="color:${color}; margin-bottom:10px; white-space: pre-line;">${response}</div>`;
         terminalInput.value = '';
         
         // Scroll to bottom

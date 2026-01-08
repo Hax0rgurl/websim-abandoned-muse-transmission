@@ -313,12 +313,43 @@ section {
     color: #fff;
     width: fit-content;
     user-select: none;
+    cursor: help;
 }
 
 .redacted:hover {
     background: transparent;
-    color: #fff;
+    color: var(--glitch-red);
     text-decoration: line-through;
+}
+
+/* Layered Text for ARG */
+.layered-text {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.layer-hidden {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    color: var(--glitch-red);
+    font-family: var(--terminal-font);
+    font-size: 0.8em;
+    letter-spacing: 2px;
+    transition: opacity 0.5s;
+    pointer-events: none;
+    background: rgba(0,0,0,0.8);
+    width: 100%;
+}
+
+.layered-text:hover .layer-hidden {
+    opacity: 1;
+}
+
+.layered-text:hover .layer-visible {
+    opacity: 0.1;
+    filter: blur(2px);
 }
 
 .highlight-red {
@@ -610,6 +641,8 @@ footer {
     box-shadow: 0 0 50px rgba(0,0,0,0.8);
     display: flex;
     flex-direction: column;
+    max-width: 95vw;
+    max-height: 90vh;
 }
 
 .terminal-header {

@@ -21,6 +21,21 @@
         }
     }
     </script>
+    <script>
+        // Init Game State immediately to prevent flash of wrong content
+        const state = JSON.parse(localStorage.getItem('AM_ARG_STATE')) || { 
+            visits: 0, 
+            flags: [],
+            unlocked: []
+        };
+        state.visits++;
+        localStorage.setItem('AM_ARG_STATE', JSON.stringify(state));
+        
+        if (state.visits > 5) {
+            document.documentElement.style.setProperty('--glitch-red', '#ff0000');
+            document.documentElement.classList.add('high-paranoia');
+        }
+    </script>
 </head>
 <body class="loading-state">
 
@@ -62,12 +77,13 @@
     <section id="hero">
         <div id="canvas-container"></div> <!-- Three.js Canvas hooks here -->
         <div class="hero-content">
-            <div class="terminal-line">$ TRANSMISSION: 0421</div>
+            <div class="terminal-line">$ TRANSMISSION: <span id="trans-id">0421</span></div>
             <h1 class="glitch-title" data-text="ABANDONED MUSE">ABANDONED MUSE</h1>
             <h2 class="subtitle">CINEMATIC ENCRYPTED TRANSMISSION</h2>
             <p class="tagline">NOT A BRAND. A STATE OF MIND.</p>
             <button class="cta-btn glitch-hover" data-text="DECRYPT TRANSMISSION">DECRYPT TRANSMISSION</button>
         </div>
+        <div id="hero-glitch-trigger" style="position: absolute; top: 20%; left: 10%; width: 50px; height: 50px; z-index: 20; cursor: pointer; opacity: 0;"></div>
     </section>
 
     <!-- Manifesto -->
@@ -77,10 +93,19 @@
                 <div class="col-left">
                     <h2 class="section-title">MANIFESTO_</h2>
                     <div class="redacted-block">
-                        <p>We are drowning in optimization.</p>
-                        <p class="redacted">The algorithm demands compliance.</p>
+                        <div class="layered-text">
+                            <p class="layer-visible">We are drowning in optimization.</p>
+                            <p class="layer-hidden">THEY ARE WATCHING YOU READ THIS.</p>
+                        </div>
+                        <div class="layered-text">
+                            <p class="layer-visible"><span class="redacted">The algorithm demands compliance.</span></p>
+                            <p class="layer-hidden">BREAK THE CYCLE.</p>
+                        </div>
                         <p>Abandoned Muse is not a brand. It is a <span class="highlight-red">rejection</span> of the status quo.</p>
-                        <p class="redacted">A forbidden archive of the forgotten.</p>
+                        <div class="layered-text">
+                            <p class="layer-visible"><span class="redacted">A forbidden archive of the forgotten.</span></p>
+                            <p class="layer-hidden">THE ARCHIVE IS ALIVE.</p>
+                        </div>
                         <p>A refusal to be controlled.</p>
                     </div>
                 </div>
@@ -238,7 +263,7 @@
 
     <!-- Scripts -->
     <script type="module" src="cube.js"></script>
-    <script src="main.js"></script>
+    <script type="module" src="main.js"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4c6229722a6346bc8eb5cb0e5eae5d41","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
