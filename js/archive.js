@@ -38,7 +38,7 @@ const fileData = {
         title: 'cam_feed_04.mp4',
         type: 'video',
         content: `<div class="video-container" style="width:100%; background:#000; border:1px solid #333;">
-            <video controls autoplay loop playsinline style="width:100%; display:block;">
+            <video controls autoplay playsinline preload="auto" style="width:100%; display:block;">
                 <source src="/grok-video-761a2e9b-d284-4381-8e3e-0852a1ed9029.mp4" type="video/mp4">
                 [ERROR: VIDEO CODEC NOT SUPPORTED]
             </video>
@@ -102,6 +102,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+let closeTimeout = null;
+
 // setupFileHandlers removed - redundant, using data-id from HTML directly in DOMContentLoaded
 
 function checkLock(id) {
@@ -114,6 +116,11 @@ function checkLock(id) {
 }
 
 function openFile(id) {
+    if (closeTimeout) {
+        clearTimeout(closeTimeout);
+        closeTimeout = null;
+    }
+
     const data = fileData[id];
     const modal = document.getElementById('fileModal');
     const title = document.getElementById('modalTitle');
@@ -144,5 +151,16 @@ function openFile(id) {
 }
 
 function closeFile() {
-    document.getElementById('fileModal').classList.remove('active');
+    const modal = document.getElementById('fileModal');
+    modal.classList.remove('active');
+
+    // Stop media playback immediately
+    const body = document.getElementById('modalBody');
+    body.querySelectorAll('video, audio').forEach(el => el.pause());
+
+    // Clear content after transition
+    closeTimeout = setTimeout(() => {
+        body.innerHTML = '';
+        closeTimeout = null;
+    }, 300);
 }
