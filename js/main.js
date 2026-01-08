@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (state.visits > 2) {
         const heroTitle = document.querySelector('.glitch-title');
-        if(heroTitle) heroTitle.setAttribute('data-text', 'DO NOT TRUST');
+        if(heroTitle) heroTitle.setAttribute('data-text', 'TRUST THE SIGNAL');
         if (Math.random() > 0.7) {
             const tagline = document.querySelector('.tagline');
             if(tagline) tagline.innerText = "THEY ARE WATCHING YOU";
