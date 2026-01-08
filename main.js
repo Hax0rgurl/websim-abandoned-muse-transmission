@@ -389,7 +389,13 @@ terminalInput.addEventListener('keypress', (e) => {
 
         switch(cmd) {
             case 'help':
-                response = 'COMMANDS: status, decrypt, origin, list, whoami, clear, exit';
+                response = 'COMMANDS: status, decrypt, origin, list, whoami, clear, exit, clue';
+                break;
+            case 'clue':
+                if (!state.flags.includes('arc1_clear')) response = 'HINT: The broadcast signal is Morse code. It spells a name.';
+                else if (!state.flags.includes('arc2_clear')) response = 'HINT: In the Archive, sometimes the corrupt data holds the key. Check the "locked" or "broken" files.';
+                else if (!state.flags.includes('arc3_clear')) response = 'HINT: The Psyche evaluation requires honesty. Or maybe just "nothing".';
+                else response = 'HINT: You have the keys. Run DECRYPT.';
                 break;
             case 'status':
                 response = `SYSTEM: ${state.visits > 3 ? 'CRITICAL FAILURE' : 'STABLE'}<br>
@@ -410,9 +416,15 @@ terminalInput.addEventListener('keypress', (e) => {
                 break;
             case 'decrypt':
                 if (state.flags.includes('arc1_clear') && state.flags.includes('arc2_clear') && state.flags.includes('arc3_clear')) {
-                    response = 'DECRYPTION COMPLETE. FINAL TRANSMISSION UNLOCKED: <a href="#" style="color:#fff">THE_TRUTH.mp4</a> (FILE CORRUPTED)';
+                    response = 'DECRYPTION COMPLETE. ACCESSING SECURE SERVER...\n[ <a href="payoff.html" style="color:#fff; text-decoration:underline; cursor:pointer;">CLICK TO INITIALIZE FINAL TRANSMISSION</a> ]';
+                    color = 'var(--scan-green)';
                 } else {
-                    response = 'ACCESS DENIED. INSUFFICIENT DATA. COMPLETE THE ARCS.';
+                    let missing = [];
+                    if (!state.flags.includes('arc1_clear')) missing.push('BROADCAST');
+                    if (!state.flags.includes('arc2_clear')) missing.push('ARCHIVE');
+                    if (!state.flags.includes('arc3_clear')) missing.push('PSYCHE');
+                    
+                    response = `ACCESS DENIED. INSUFFICIENT DATA.\nMISSING KEYS: ${missing.join(', ')}`;
                     color = 'var(--glitch-red)';
                 }
                 break;
