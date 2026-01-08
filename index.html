@@ -56,7 +56,10 @@
     <div id="cursor-trail"></div>
 
     <!-- Audio Controls -->
-    <button id="audio-toggle" class="terminal-text">[ AUDIO: OFF ]</button>
+    <div id="audio-controls-container">
+        <div id="now-playing" style="opacity:0; transition: opacity 0.5s;">BUFFERING...</div>
+        <button id="audio-toggle" class="terminal-text">[ AUDIO: OFF ]</button>
+    </div>
 
     <!-- Navigation -->
     <nav>
@@ -193,11 +196,11 @@
                         <span class="vid-date">2026.04.18</span>
                     </div>
                 </div>
-                <div class="video-item">
-                    <div class="vid-thumb"></div>
+                <div class="video-item audio-trigger" data-src="86977460-5be6-41d2-ba43-182e5ea70b33.mp3" data-title="DEMO_TAPE_01">
+                    <div class="vid-thumb audio-thumb"></div>
                     <div class="vid-meta">
-                        <span class="vid-code">CORRUPTED_FILE</span>
-                        <span class="vid-date">ERROR</span>
+                        <span class="vid-code">DEMO_TAPE_01.MP3</span>
+                        <span class="vid-date">UNRELEASED</span>
                     </div>
                 </div>
             </div>
