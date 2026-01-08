@@ -29,9 +29,13 @@ export const GameState = {
     },
     init() {
         const state = this.get();
-        // Only increment visits if on main page or once per session? 
-        // For simplicity, let's just ensure structure exists.
-        // We handle visit increment in main.js
         return state;
     }
 };
+
+export function initVisits() {
+    const state = GameState.get();
+    state.visits = (state.visits || 0) + 1;
+    GameState.save(state);
+    return state;
+}

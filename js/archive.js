@@ -78,16 +78,21 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('file-neuro').addEventListener('click', () => checkLock('neuro'));
     }
 
-    // Attach normal click handlers
+    // Attach click handlers to all files
     document.querySelectorAll('.file').forEach(el => {
         const id = el.getAttribute('data-id');
-        // Only attach if not one of the locked ones we handled specially above
-        // Actually, cleaner way:
+        if (!id) return;
+
+        // Skip if it's one of the special locked files we handled manually above
+        if ((id === 'video' && !state.flags.includes('arc1_clear')) || 
+            (id === 'neuro' && !state.flags.includes('arc3_clear'))) {
+            return; 
+        }
+
+        // Attach generic open handler
+        // Remove existing listeners by cloning (simple way) or just add if we know it's clean
+        el.addEventListener('click', () => openFile(id));
     });
-    
-    // Bind all static clicks (assuming HTML has onclick removed or we add data-id)
-    // We need to update HTML to use data-id instead of onclick
-    setupFileHandlers();
 
     // Modal close
     document.getElementById('fileModal').addEventListener('click', (e) => {
@@ -97,31 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-function setupFileHandlers() {
-    const clickMap = {
-        'sub_0421_bio.dat': 'bio',
-        'incident_report.log': 'incident',
-        'manifesto_draft.txt': 'manifesto',
-        'demo_tape_01.mp3': 'track1',
-        'sys_core_dump.bin': 'corrupted',
-        'cam_feed_04.mp4': 'video',
-        'neuro_map_v1.json': 'neuro'
-    };
-
-    document.querySelectorAll('.file').forEach(file => {
-        const text = file.innerText.trim();
-        const key = Object.keys(clickMap).find(k => text.includes(k));
-        if(key) {
-            const id = clickMap[key];
-            file.setAttribute('data-id', id);
-            
-            // If not locked, attach open
-            if(!file.classList.contains('locked')) {
-                file.addEventListener('click', () => openFile(id));
-            }
-        }
-    });
-}
+// setupFileHandlers removed - redundant, using data-id from HTML directly in DOMContentLoaded
 
 function checkLock(id) {
     // Re-check state just in case
