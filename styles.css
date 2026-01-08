@@ -807,8 +807,7 @@ footer {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
-    padding: 20px 0;
+    height: 100vh;
     text-align: center;
 }
 .psyche-container {
@@ -828,20 +827,25 @@ footer {
     border: 2px solid transparent;
     transition: border-color 0.5s;
 }
-
-#question {
-    font-family: 'Space Mono', monospace;
-    color: #bfa3ff;
-    letter-spacing: 2px;
-    font-size: 1.5rem;
-    margin-bottom: 25px;
-    text-shadow: 0 0 10px rgba(191, 163, 255, 0.3);
-}
 @keyframes pulse {
     0% { transform: scale(0.95); opacity: 0.7; }
     50% { transform: scale(1.05); opacity: 1; }
     100% { transform: scale(0.95); opacity: 0.7; }
 }
+
+#question {
+    font-family: 'Space Mono', monospace;
+    color: #bfa3ff;
+    letter-spacing: 2px;
+    margin-bottom: 40px;
+    font-size: 2rem;
+    text-shadow: 0 0 10px rgba(191, 163, 255, 0.4);
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    text-transform: uppercase;
+}
+
 .psyche-input {
     background: transparent;
     border: none;
@@ -852,8 +856,6 @@ footer {
     font-size: 1.2rem;
     padding: 10px;
     width: 300px;
-    display: block;
-    margin: 0 auto;
 }
 .psyche-input:focus {
     outline: none;
