@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABANDONED MUSE // TRANSMISSION</title>
+    
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://esm.sh/three@0.160.0",
+            "three/addons/": "https://esm.sh/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Loading Screen -->
+    <div id="loader">
+        <div class="loader-content">
+            <div class="loader-cube"></div>
+            <div class="glitch-text" data-text="DECRYPTING...">DECRYPTING...</div>
+            <div class="progress-bar"><div class="progress-fill"></div></div>
+        </div>
+    </div>
+
+    <!-- Visual Overlays -->
+    <div class="scanlines"></div>
+    <div class="noise-overlay"></div>
+    <div class="vignette"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-logo">ABANDONED_MUSE</div>
+        <div class="nav-links">
+            <a href="#hero" class="glitch-hover" data-text="HOME">HOME</a>
+            <a href="#arcs" class="glitch-hover" data-text="ARCS">ARCS</a>
+            <a href="#archive" class="glitch-hover" data-text="ARCHIVE">ARCHIVE</a>
+            <a href="#manifesto" class="glitch-hover" data-text="MANIFESTO">MANIFESTO</a>
+            <a href="#contact" class="glitch-hover" data-text="CONTACT">CONTACT</a>
+        </div>
+        <div class="mobile-menu-btn">///</div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div id="canvas-container"></div>
+        <div class="hero-content">
+            <h1 class="glitch-header" data-text="ABANDONED MUSE">ABANDONED MUSE</h1>
+            <p class="subtitle glitch-text" data-text="NOT A BRAND. A STATE OF MIND.">NOT A BRAND. A STATE OF MIND.</p>
+            <div class="terminal-line">
+                <span class="prompt">$</span> <span id="typewriter"></span><span class="cursor">_</span>
+            </div>
+            <button class="cta-btn" id="decrypt-btn">DECRYPT TRANSMISSION</button>
+        </div>
+    </section>
+
+    <!-- Manifesto -->
+    <section id="manifesto">
+        <div class="container">
+            <h2 class="section-title">Classified Information</h2>
+            <div class="manifesto-box">
+                <p>ABANDONED MUSE IS <span class="redacted">NOT A BRAND</span>. IT IS A REJECTION OF OPTIMIZATION. A <span class="redacted">FORBIDDEN ARCHIVE</span>. A REFUSAL TO BE CONTROLLED.</p>
+                <p>WE ARE WATCHING THE <span class="redacted">SYSTEM CRUMBLE</span> FROM THE INSIDE.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Arcs -->
+    <section id="arcs">
+        <div class="container">
+            <h2 class="section-title">THE ARCS</h2>
+            <div class="grid-3">
+                <div class="card arc-card red-theme">
+                    <div class="card-header">ARC_01 // BROADCAST</div>
+                    <div class="card-body">
+                        <div class="icon-cube"></div>
+                        <h3>INTERFERENCE</h3>
+                        <p>Signal corruption detected on all frequencies.</p>
+                        <button class="access-btn">ACCESS</button>
+                    </div>
+                </div>
+                <div class="card arc-card gray-theme">
+                    <div class="card-header">ARC_02 // ARCHIVE</div>
+                    <div class="card-body">
+                        <div class="icon-cube"></div>
+                        <h3>THE ARCHIVE</h3>
+                        <p>Recovered data fragments from the old world.</p>
+                        <button class="access-btn">ACCESS</button>
+                    </div>
+                </div>
+                <div class="card arc-card purple-theme">
+                    <div class="card-header">ARC_03 // PSYCH</div>
+                    <div class="card-body">
+                        <div class="icon-cube"></div>
+                        <h3>EXPERIMENT</h3>
+                        <p>Subject displayed erratic behavior during Phase 4.</p>
+                        <button class="access-btn">ACCESS</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Media -->
+    <section id="media">
+        <div class="container">
+            <h2 class="section-title">TRANSMISSIONS</h2>
+            <div class="grid-2">
+                <div class="media-item">
+                    <div class="video-placeholder">PLAY TRANSMISSION_01</div>
+                    <div class="caption">EVIDENCE_A.mp4</div>
+                </div>
+                <div class="media-item">
+                    <div class="video-placeholder">PLAY TRANSMISSION_02</div>
+                    <div class="caption">EVIDENCE_B.mp4</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Archive -->
+    <section id="archive">
+        <div class="container">
+            <h2 class="section-title">FILE SYSTEM</h2>
+            <div class="file-grid">
+                <div class="file">
+                    <span class="status">[LOCKED]</span>
+                    <span class="name">project_mk.dat</span>
+                </div>
+                <div class="file">
+                    <span class="status status-open">[OPEN]</span>
+                    <span class="name">manifesto_v1.txt</span>
+                </div>
+                <div class="file">
+                    <span class="status">[CORRUPT]</span>
+                    <span class="name">audio_log_04.wav</span>
+                </div>
+                <div class="file">
+                    <span class="status">[LOCKED]</span>
+                    <span class="name">user_data.db</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+        <div class="container">
+            <h2 class="section-title">DECRYPT CONTACT</h2>
+            <form id="contact-form">
+                <div class="form-group">
+                    <label>> IDENTIFIER (NAME)</label>
+                    <input type="text" placeholder="ENTER IDENTIFIER">
+                </div>
+                <div class="form-group">
+                    <label>> FREQUENCY (EMAIL)</label>
+                    <input type="email" placeholder="ENTER FREQUENCY">
+                </div>
+                <div class="form-group">
+                    <label>> DATA PACKET (MESSAGE)</label>
+                    <textarea placeholder="ENTER MESSAGE CONTENT..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn">SEND TRANSMISSION</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">AM_LOGO_WATERMARK</div>
+            <p>TRANSMISSION ENDS. 0421</p>
+            <div class="terminal-input-area">
+                <span>guest@abandoned_muse:~$</span>
+                <input type="text" id="terminal-input" placeholder="type 'help'">
+            </div>
+            <p class="copyright">ABANDONED MUSE © 2026</p>
+        </div>
+        <div id="audio-toggle" class="audio-control">AUDIO: OFF</div>
+    </footer>
+
+    <script type="module" src="main.js"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4c6229722a6346bc8eb5cb0e5eae5d41","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
