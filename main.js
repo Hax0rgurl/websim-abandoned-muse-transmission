@@ -248,3 +248,78 @@ document.getElementById('contact-form').addEventListener('submit', (e) => {
         }, 3000);
     }, 2000);
 });
+
+// === INTERACTIVE BUTTONS ===
+
+// Hero CTA Button
+const ctaBtn = document.querySelector('.cta-btn');
+if (ctaBtn) {
+    ctaBtn.addEventListener('click', () => {
+        const originalText = ctaBtn.getAttribute('data-text');
+        ctaBtn.innerText = "INITIALIZING...";
+        
+        // Glitch effect on button
+        let steps = 0;
+        const glitchInterval = setInterval(() => {
+            ctaBtn.style.transform = `translate(${Math.random()*4-2}px, ${Math.random()*4-2}px)`;
+            steps++;
+            if(steps > 5) {
+                clearInterval(glitchInterval);
+                ctaBtn.style.transform = 'none';
+                // Scroll to Arcs
+                document.getElementById('arcs').scrollIntoView({ behavior: 'smooth' });
+                
+                setTimeout(() => {
+                    ctaBtn.innerText = originalText;
+                }, 1000);
+            }
+        }, 50);
+    });
+}
+
+// Access Buttons (Cards)
+document.querySelectorAll('.access-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        const btn = e.target;
+        const originalText = btn.innerText;
+        
+        // Fail state simulation
+        btn.innerText = "ENCRYPTED";
+        btn.style.color = "var(--glitch-red)";
+        btn.style.borderColor = "var(--glitch-red)";
+        
+        // Optional: Flash the terminal or show an alert
+        const terminalOutput = document.getElementById('terminal-output');
+        if(terminalOutput) {
+            terminalOutput.innerHTML += `<div style="color:var(--glitch-red)">> SYSTEM ALERT: UNAUTHORIZED ACCESS ATTEMPT ON SECURE ARCHIVE.</div>`;
+            const body = document.querySelector('.terminal-body');
+            if(body) body.scrollTop = body.scrollHeight;
+        }
+
+        setTimeout(() => {
+            btn.innerText = originalText;
+            btn.style.color = "";
+            btn.style.borderColor = "";
+        }, 1500);
+    });
+});
+
+// Mobile Navigation
+const hamburger = document.querySelector('.hamburger');
+const navLinks = document.querySelector('.nav-links');
+const navItems = document.querySelectorAll('.nav-item');
+
+if (hamburger && navLinks) {
+    hamburger.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        hamburger.classList.toggle('active');
+    });
+
+    // Close menu when clicking a link
+    navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            hamburger.classList.remove('active');
+        });
+    });
+}
