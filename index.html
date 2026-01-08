@@ -3,8 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ABANDONED MUSE // TRANSMISSION</title>
+    <title>ABANDONED MUSE // ENCRYPTED TRANSMISSION</title>
     
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Import Map for Three.js -->
     <script type="importmap">
     {
         "imports": {
@@ -13,94 +21,117 @@
         }
     }
     </script>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="loading-state">
 
     <!-- Loading Screen -->
     <div id="loader">
         <div class="loader-content">
-            <div class="loader-cube"></div>
+            <div class="cube-spinner"></div>
             <div class="glitch-text" data-text="DECRYPTING...">DECRYPTING...</div>
             <div class="progress-bar"><div class="progress-fill"></div></div>
         </div>
     </div>
 
     <!-- Visual Overlays -->
-    <div class="scanlines"></div>
-    <div class="noise-overlay"></div>
-    <div class="vignette"></div>
+    <div id="scanlines"></div>
+    <div id="noise"></div>
+    <div id="vignette"></div>
+    <div id="cursor-dot"></div>
+    <div id="cursor-trail"></div>
+
+    <!-- Audio Controls -->
+    <button id="audio-toggle" class="terminal-text">[ AUDIO: OFF ]</button>
 
     <!-- Navigation -->
     <nav>
-        <div class="nav-logo">ABANDONED_MUSE</div>
+        <div class="nav-logo">AM_PROTO_V1</div>
         <div class="nav-links">
-            <a href="#hero" class="glitch-hover" data-text="HOME">HOME</a>
-            <a href="#arcs" class="glitch-hover" data-text="ARCS">ARCS</a>
-            <a href="#archive" class="glitch-hover" data-text="ARCHIVE">ARCHIVE</a>
-            <a href="#manifesto" class="glitch-hover" data-text="MANIFESTO">MANIFESTO</a>
-            <a href="#contact" class="glitch-hover" data-text="CONTACT">CONTACT</a>
+            <a href="#hero" class="nav-item" data-text="HOME">HOME</a>
+            <a href="#arcs" class="nav-item" data-text="ARCS">ARCS</a>
+            <a href="#manifesto" class="nav-item" data-text="MANIFESTO">MANIFESTO</a>
+            <a href="#archive" class="nav-item" data-text="ARCHIVE">ARCHIVE</a>
+            <a href="#contact" class="nav-item" data-text="CONTACT">CONTACT</a>
         </div>
-        <div class="mobile-menu-btn">///</div>
+        <div class="hamburger">
+            <span></span><span></span><span></span>
+        </div>
     </nav>
 
     <!-- Hero Section -->
     <section id="hero">
-        <div id="canvas-container"></div>
+        <div id="canvas-container"></div> <!-- Three.js Canvas hooks here -->
         <div class="hero-content">
-            <h1 class="glitch-header" data-text="ABANDONED MUSE">ABANDONED MUSE</h1>
-            <p class="subtitle glitch-text" data-text="NOT A BRAND. A STATE OF MIND.">NOT A BRAND. A STATE OF MIND.</p>
-            <div class="terminal-line">
-                <span class="prompt">$</span> <span id="typewriter"></span><span class="cursor">_</span>
-            </div>
-            <button class="cta-btn" id="decrypt-btn">DECRYPT TRANSMISSION</button>
+            <div class="terminal-line">$ TRANSMISSION: 0421</div>
+            <h1 class="glitch-title" data-text="ABANDONED MUSE">ABANDONED MUSE</h1>
+            <h2 class="subtitle">CINEMATIC ENCRYPTED TRANSMISSION</h2>
+            <p class="tagline">NOT A BRAND. A STATE OF MIND.</p>
+            <button class="cta-btn glitch-hover" data-text="DECRYPT TRANSMISSION">DECRYPT TRANSMISSION</button>
         </div>
     </section>
 
     <!-- Manifesto -->
     <section id="manifesto">
         <div class="container">
-            <h2 class="section-title">Classified Information</h2>
-            <div class="manifesto-box">
-                <p>ABANDONED MUSE IS <span class="redacted">NOT A BRAND</span>. IT IS A REJECTION OF OPTIMIZATION. A <span class="redacted">FORBIDDEN ARCHIVE</span>. A REFUSAL TO BE CONTROLLED.</p>
-                <p>WE ARE WATCHING THE <span class="redacted">SYSTEM CRUMBLE</span> FROM THE INSIDE.</p>
+            <div class="grid-layout">
+                <div class="col-left">
+                    <h2 class="section-title">MANIFESTO_</h2>
+                    <div class="redacted-block">
+                        <p>We are drowning in optimization.</p>
+                        <p class="redacted">The algorithm demands compliance.</p>
+                        <p>Abandoned Muse is not a brand. It is a <span class="highlight-red">rejection</span> of the status quo.</p>
+                        <p class="redacted">A forbidden archive of the forgotten.</p>
+                        <p>A refusal to be controlled.</p>
+                    </div>
+                </div>
+                <div class="col-right terminal-box">
+                    <p class="code-text">> SYSTEM_CHECK: COMPLETED</p>
+                    <p class="code-text">> THREAT_LEVEL: HIGH</p>
+                    <p class="code-text">> TARGET: CONSCIOUSNESS</p>
+                    <p class="code-text blinking">_</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Arcs -->
+    <!-- Campaign Arcs -->
     <section id="arcs">
         <div class="container">
-            <h2 class="section-title">THE ARCS</h2>
-            <div class="grid-3">
-                <div class="card arc-card red-theme">
-                    <div class="card-header">ARC_01 // BROADCAST</div>
-                    <div class="card-body">
-                        <div class="icon-cube"></div>
-                        <h3>INTERFERENCE</h3>
-                        <p>Signal corruption detected on all frequencies.</p>
+            <h2 class="section-title" data-text="THE ARCS">THE ARCS</h2>
+            <div class="cards-grid">
+                <!-- Arc 1 -->
+                <div class="card card-red">
+                    <div class="card-image-wrap">
+                        <img src="arc_broadcast.png" alt="Broadcast Interference">
+                        <div class="card-overlay"></div>
+                    </div>
+                    <div class="card-content">
+                        <h3>01: BROADCAST</h3>
+                        <p>INTERFERENCE DETECTED</p>
                         <button class="access-btn">ACCESS</button>
                     </div>
                 </div>
-                <div class="card arc-card gray-theme">
-                    <div class="card-header">ARC_02 // ARCHIVE</div>
-                    <div class="card-body">
-                        <div class="icon-cube"></div>
-                        <h3>THE ARCHIVE</h3>
-                        <p>Recovered data fragments from the old world.</p>
+                <!-- Arc 2 -->
+                <div class="card card-gray">
+                    <div class="card-image-wrap">
+                        <img src="arc_archive.png" alt="The Archive">
+                        <div class="card-overlay"></div>
+                    </div>
+                    <div class="card-content">
+                        <h3>02: ARCHIVE</h3>
+                        <p>CLASSIFIED DATA</p>
                         <button class="access-btn">ACCESS</button>
                     </div>
                 </div>
-                <div class="card arc-card purple-theme">
-                    <div class="card-header">ARC_03 // PSYCH</div>
-                    <div class="card-body">
-                        <div class="icon-cube"></div>
-                        <h3>EXPERIMENT</h3>
-                        <p>Subject displayed erratic behavior during Phase 4.</p>
+                <!-- Arc 3 -->
+                <div class="card card-purple">
+                    <div class="card-image-wrap">
+                        <img src="arc_psych.png" alt="Psych Experiment">
+                        <div class="card-overlay"></div>
+                    </div>
+                    <div class="card-content">
+                        <h3>03: PSYCHE</h3>
+                        <p>EXPERIMENTAL PHASE</p>
                         <button class="access-btn">ACCESS</button>
                     </div>
                 </div>
@@ -108,43 +139,41 @@
         </div>
     </section>
 
-    <!-- Media -->
-    <section id="media">
-        <div class="container">
-            <h2 class="section-title">TRANSMISSIONS</h2>
-            <div class="grid-2">
-                <div class="media-item">
-                    <div class="video-placeholder">PLAY TRANSMISSION_01</div>
-                    <div class="caption">EVIDENCE_A.mp4</div>
-                </div>
-                <div class="media-item">
-                    <div class="video-placeholder">PLAY TRANSMISSION_02</div>
-                    <div class="caption">EVIDENCE_B.mp4</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Archive -->
+    <!-- Archive / Transmissions -->
     <section id="archive">
         <div class="container">
-            <h2 class="section-title">FILE SYSTEM</h2>
-            <div class="file-grid">
-                <div class="file">
-                    <span class="status">[LOCKED]</span>
-                    <span class="name">project_mk.dat</span>
+            <div class="header-flex">
+                <h2 class="section-title">TRANSMISSIONS</h2>
+                <span class="record-indicator">● REC</span>
+            </div>
+            <div class="video-grid">
+                <div class="video-item">
+                    <div class="vid-thumb"></div>
+                    <div class="vid-meta">
+                        <span class="vid-code">VID_0492.MP4</span>
+                        <span class="vid-date">2026.04.12</span>
+                    </div>
                 </div>
-                <div class="file">
-                    <span class="status status-open">[OPEN]</span>
-                    <span class="name">manifesto_v1.txt</span>
+                <div class="video-item">
+                    <div class="vid-thumb"></div>
+                    <div class="vid-meta">
+                        <span class="vid-code">VID_0493.MP4</span>
+                        <span class="vid-date">2026.04.14</span>
+                    </div>
                 </div>
-                <div class="file">
-                    <span class="status">[CORRUPT]</span>
-                    <span class="name">audio_log_04.wav</span>
+                <div class="video-item">
+                    <div class="vid-thumb"></div>
+                    <div class="vid-meta">
+                        <span class="vid-code">VID_0494.MP4</span>
+                        <span class="vid-date">2026.04.18</span>
+                    </div>
                 </div>
-                <div class="file">
-                    <span class="status">[LOCKED]</span>
-                    <span class="name">user_data.db</span>
+                <div class="video-item">
+                    <div class="vid-thumb"></div>
+                    <div class="vid-meta">
+                        <span class="vid-code">CORRUPTED_FILE</span>
+                        <span class="vid-date">ERROR</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -152,41 +181,64 @@
 
     <!-- Contact -->
     <section id="contact">
-        <div class="container">
+        <div class="container narrow">
             <h2 class="section-title">DECRYPT CONTACT</h2>
-            <form id="contact-form">
+            <form id="contact-form" class="terminal-form">
                 <div class="form-group">
-                    <label>> IDENTIFIER (NAME)</label>
-                    <input type="text" placeholder="ENTER IDENTIFIER">
+                    <label>> IDENTIFIER (NAME):</label>
+                    <input type="text" required placeholder="_">
                 </div>
                 <div class="form-group">
-                    <label>> FREQUENCY (EMAIL)</label>
-                    <input type="email" placeholder="ENTER FREQUENCY">
+                    <label>> FREQUENCY (EMAIL):</label>
+                    <input type="email" required placeholder="_">
                 </div>
                 <div class="form-group">
-                    <label>> DATA PACKET (MESSAGE)</label>
-                    <textarea placeholder="ENTER MESSAGE CONTENT..."></textarea>
+                    <label>> TRANSMISSION (MESSAGE):</label>
+                    <textarea rows="4" required placeholder="_"></textarea>
                 </div>
-                <button type="submit" class="submit-btn">SEND TRANSMISSION</button>
+                <button type="submit" class="submit-btn glitch-hover" data-text="SEND TRANSMISSION">SEND TRANSMISSION</button>
             </form>
         </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <div class="footer-content">
-            <div class="footer-logo">AM_LOGO_WATERMARK</div>
-            <p>TRANSMISSION ENDS. 0421</p>
-            <div class="terminal-input-area">
-                <span>guest@abandoned_muse:~$</span>
-                <input type="text" id="terminal-input" placeholder="type 'help'">
+        <div class="container">
+            <div class="footer-content">
+                <div class="logo-mark">AM</div>
+                <div class="socials">
+                    <a href="#">INSTAGRAM</a>
+                    <a href="#">YOUTUBE</a>
+                    <a href="#">X_CORP</a>
+                </div>
+                <div class="copyright">
+                    <p>TRANSMISSION ENDS. 0421</p>
+                    <p>ABANDONED MUSE © 2026</p>
+                </div>
             </div>
-            <p class="copyright">ABANDONED MUSE © 2026</p>
         </div>
-        <div id="audio-toggle" class="audio-control">AUDIO: OFF</div>
     </footer>
 
-    <script type="module" src="main.js"></script>
+    <!-- Hidden Terminal Overlay -->
+    <div id="terminal-overlay">
+        <div class="terminal-window">
+            <div class="terminal-header">ROOT_ACCESS_GRANTED</div>
+            <div class="terminal-body">
+                <div id="terminal-output">
+                    Welcome to the backend, user.<br>
+                    Type 'help' for available commands.<br>
+                </div>
+                <div class="input-line">
+                    <span>user@muse:~$</span>
+                    <input type="text" id="terminal-input" autocomplete="off" spellcheck="false">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="cube.js"></script>
+    <script src="main.js"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4c6229722a6346bc8eb5cb0e5eae5d41","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
