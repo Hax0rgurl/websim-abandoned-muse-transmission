@@ -47,25 +47,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = document.querySelector('.close-modal');
 
     document.querySelectorAll('.media-item').forEach(item => {
-        item.addEventListener('mouseover', () => {
-            const vid = item.querySelector('video');
-            if(vid) vid.play();
-        });
-        item.addEventListener('mouseout', () => {
-            const vid = item.querySelector('video');
-            if(vid) { vid.pause(); vid.currentTime = 0; }
-        });
-
         item.addEventListener('click', () => {
             const src = item.getAttribute('data-video');
             const title = item.getAttribute('data-title');
             
             modalTitle.innerText = title;
             modalBody.innerHTML = `
-                <video controls autoplay style="width: 100%; display: block; max-height: 70vh;">
+                <video controls autoplay playsinline style="width: 100%; display: block; max-height: 70vh; box-shadow: 0 0 20px rgba(0,0,0,0.5);">
                     <source src="${src}" type="video/mp4">
                     SIGNAL LOST.
                 </video>
+                <div style="margin-top: 15px; font-size: 0.8rem; color: #666; font-family: 'Space Mono', monospace;">
+                    SOURCE: ABANDONED MUSE ARCHIVE // RECOVERED FOOTAGE
+                </div>
             `;
             modal.classList.add('active');
         });
