@@ -82,6 +82,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 9. Buttons & Interactive
     setupInteractions();
+
+    // 10. Interactive Transmissions
+    document.querySelectorAll('.interactive-transmission').forEach(item => {
+        item.addEventListener('click', function() {
+            if (!this.classList.contains('active')) {
+                this.classList.add('active');
+                const thumb = this.querySelector('.vid-thumb');
+                if(thumb) thumb.style.animation = 'glitch 0.3s linear';
+            }
+        });
+    });
 });
 
 
