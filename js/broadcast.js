@@ -39,4 +39,47 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
+
+    // Media Handling
+    const modal = document.getElementById('broadcastModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    const closeBtn = document.querySelector('.close-modal');
+
+    document.querySelectorAll('.media-item').forEach(item => {
+        item.addEventListener('mouseover', () => {
+            const vid = item.querySelector('video');
+            if(vid) vid.play();
+        });
+        item.addEventListener('mouseout', () => {
+            const vid = item.querySelector('video');
+            if(vid) { vid.pause(); vid.currentTime = 0; }
+        });
+
+        item.addEventListener('click', () => {
+            const src = item.getAttribute('data-video');
+            const title = item.getAttribute('data-title');
+            
+            modalTitle.innerText = title;
+            modalBody.innerHTML = `
+                <video controls autoplay style="width: 100%; display: block; max-height: 70vh;">
+                    <source src="${src}" type="video/mp4">
+                    SIGNAL LOST.
+                </video>
+            `;
+            modal.classList.add('active');
+        });
+    });
+
+    function closeModal() {
+        modal.classList.remove('active');
+        modalBody.innerHTML = ''; // Stop video
+    }
+
+    if(closeBtn) closeBtn.addEventListener('click', closeModal);
+    
+    // Close on background click
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
 });

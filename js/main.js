@@ -222,14 +222,27 @@ function setupInteractions() {
         });
     }
 
-    // Access Buttons
-    document.querySelectorAll('.access-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            const btn = e.target;
+    // Cards & Access Buttons Interaction
+    document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            // Prevent double firing if clicking button specifically since event bubbles, 
+            // but we want the whole card to act as the button.
+            // If the user clicked the button, let's handle it, but if they clicked the card image, also handle it.
+            
+            // Find the button inside to get data
+            const btn = card.querySelector('.access-btn');
+            if (!btn) return;
+            
+            // Visual feedback on button even if card clicked
             const target = btn.getAttribute('data-target');
+            const originalText = btn.innerText;
+            
+            if (btn.innerText === "DECRYPTING..." || btn.innerText === "ACCESS GRANTED") return;
+
             btn.innerText = "DECRYPTING...";
             btn.style.color = "var(--scan-green)";
             btn.style.borderColor = "var(--scan-green)";
+            card.style.borderColor = "var(--scan-green)";
             
             const terminalOutput = document.getElementById('terminal-output');
             if(terminalOutput) {

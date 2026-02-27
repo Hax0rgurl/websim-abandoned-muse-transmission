@@ -888,12 +888,76 @@ body.broadcast-page {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+    overflow-y: auto;
+    padding: 50px 20px;
 }
 .broadcast-container {
     text-align: center;
     z-index: 10;
+    max-width: 800px;
+    width: 100%;
+}
+.broadcast-media-section {
+    margin-top: 50px;
+    border-top: 1px solid #333;
+    padding-top: 30px;
+}
+.media-title {
+    font-family: 'Space Mono', monospace;
+    color: #555;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+.broadcast-media-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+.media-item {
+    background: #111;
+    border: 1px solid #333;
+    aspect-ratio: 16/9;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    transition: 0.3s;
+}
+.media-item:hover {
+    border-color: var(--glitch-red);
+}
+.media-item video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.5;
+    transition: 0.3s;
+}
+.media-item:hover video {
+    opacity: 0.8;
+}
+.play-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    color: #fff;
+    opacity: 0.7;
+    pointer-events: none;
+    text-shadow: 0 0 10px #000;
+}
+.media-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0,0,0,0.8);
+    color: var(--scan-green);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    padding: 5px;
+    text-align: left;
 }
 .glitch-anim {
     animation: glitch 1s infinite;
@@ -1085,14 +1149,14 @@ body.assets-page {
 
 .assets-header {
     text-align: center;
-    margin-bottom: 60px;
+    margin-bottom: 40px;
     position: relative;
     z-index: 10;
 }
 
 .assets-header h1 {
     font-family: var(--terminal-font);
-    font-size: 3rem;
+    font-size: 2.5rem;
     color: #fff;
     text-shadow: 2px 2px var(--glitch-red);
     margin-bottom: 10px;
@@ -1106,11 +1170,11 @@ body.assets-page {
 
 .asset-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 40px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 40px 100px;
+    padding: 0 20px 100px;
     position: relative;
     z-index: 10;
 }
@@ -1120,6 +1184,8 @@ body.assets-page {
     border: 1px solid #333;
     overflow: hidden;
     transition: transform 0.3s, border-color 0.3s;
+    display: flex;
+    flex-direction: column;
 }
 
 .asset-card:hover {
@@ -1129,7 +1195,7 @@ body.assets-page {
 
 .asset-img-container {
     width: 100%;
-    aspect-ratio: 1/1;
+    aspect-ratio: 16/9; /* More compact than square */
     overflow: hidden;
     border-bottom: 1px solid #333;
     position: relative;
@@ -1149,28 +1215,35 @@ body.assets-page {
 }
 
 .asset-details {
-    padding: 20px;
+    padding: 15px;
     font-family: var(--terminal-font);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .asset-details h3 {
     color: #fff;
-    font-size: 1.1rem;
-    margin-bottom: 15px;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
     border-bottom: 1px solid #222;
-    padding-bottom: 10px;
+    padding-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .prompt-box {
     background: #000;
     border: 1px solid #333;
-    padding: 15px;
-    font-size: 0.8rem;
+    padding: 10px;
+    font-size: 0.7rem;
     color: #888;
-    margin-bottom: 15px;
-    height: 100px;
+    margin-bottom: 10px;
+    height: 60px; /* Smaller height */
     overflow-y: auto;
     font-family: 'Space Mono', monospace;
+    flex-grow: 1;
 }
 
 .copy-btn {
