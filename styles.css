@@ -1076,6 +1076,121 @@ body.archive-page {
     color: #000;
 }
 
+/* === SUB-PAGE: ASSETS === */
+body.assets-page {
+    background-color: #050505;
+    min-height: 100vh;
+    padding-top: 100px; /* Space for nav */
+}
+
+.assets-header {
+    text-align: center;
+    margin-bottom: 60px;
+    position: relative;
+    z-index: 10;
+}
+
+.assets-header h1 {
+    font-family: var(--terminal-font);
+    font-size: 3rem;
+    color: #fff;
+    text-shadow: 2px 2px var(--glitch-red);
+    margin-bottom: 10px;
+}
+
+.assets-header p {
+    font-family: var(--terminal-font);
+    color: var(--scan-green);
+    letter-spacing: 2px;
+}
+
+.asset-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px 100px;
+    position: relative;
+    z-index: 10;
+}
+
+.asset-card {
+    background: #111;
+    border: 1px solid #333;
+    overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s;
+}
+
+.asset-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--glitch-red);
+}
+
+.asset-img-container {
+    width: 100%;
+    aspect-ratio: 1/1;
+    overflow: hidden;
+    border-bottom: 1px solid #333;
+    position: relative;
+}
+
+.asset-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s filter 0.5s;
+    filter: grayscale(100%);
+}
+
+.asset-card:hover .asset-img-container img {
+    transform: scale(1.05);
+    filter: grayscale(0%);
+}
+
+.asset-details {
+    padding: 20px;
+    font-family: var(--terminal-font);
+}
+
+.asset-details h3 {
+    color: #fff;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #222;
+    padding-bottom: 10px;
+}
+
+.prompt-box {
+    background: #000;
+    border: 1px solid #333;
+    padding: 15px;
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 15px;
+    height: 100px;
+    overflow-y: auto;
+    font-family: 'Space Mono', monospace;
+}
+
+.copy-btn {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid var(--scan-green);
+    color: var(--scan-green);
+    font-family: var(--terminal-font);
+    cursor: pointer;
+    transition: 0.3s;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.copy-btn:hover {
+    background: var(--scan-green);
+    color: #000;
+}
+
 /* === SUB-PAGE: PAYOFF === */
 body.payoff-page {
     background-color: #000;
